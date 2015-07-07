@@ -16,17 +16,18 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 #define VERBOSE 0
 
-// 6 legs, 3 servos per leg, 3 EPA (Min, Neutral, Max) per servo
+// 6 legs, 2 servos per leg, 3 EPA (Min, Neutral, Max) per servo
 uint16_t hexapodEpa[NUM_LEGS][NUM_SERVOS_PER_LEG][NUM_EPA_PER_SERVO];
 
 /**
-* Setup the EPA for all the legs, all the servos
+* Setup the End Point Adjustment for all the legs, all the servos
 */
 void setupEpa() {
   
   if (VERBOSE)    
     Serial.println("-- Setting up the EPA for all the legs, all the servos.");
-  
+
+  // Do set defaults first
   for (int i = 0; i < NUM_LEGS; i++) {
     for (int j = 0; j < NUM_SERVOS_PER_LEG; j++) {
       hexapodEpa[i][j][0] = DEFAULT_SERVO_MIN_EPA;  
@@ -34,14 +35,15 @@ void setupEpa() {
       hexapodEpa[i][j][2] = DEFAULT_SERVO_MAX_EPA;
     }
   }
-  //   
+  
+  // Custom - per individual servo settings
   hexapodEpa[0][0][0] = DEFAULT_SERVO_MIN_EPA - 40;  
   hexapodEpa[0][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
   hexapodEpa[0][0][2] = DEFAULT_SERVO_NEUTRAL_EPA + 50;
 
   hexapodEpa[0][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 40;  
   hexapodEpa[0][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
-  hexapodEpa[0][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
+  hexapodEpa[0][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 10;
 
   hexapodEpa[1][0][0] = DEFAULT_SERVO_MIN_EPA - 20;  
   hexapodEpa[1][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 60;
@@ -49,7 +51,7 @@ void setupEpa() {
 
   hexapodEpa[1][1][0] = DEFAULT_SERVO_NEUTRAL_EPA;  
   hexapodEpa[1][1][1] = DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodEpa[1][1][2] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodEpa[1][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 50;
   
   hexapodEpa[2][0][0] = DEFAULT_SERVO_MIN_EPA - 30;  
   hexapodEpa[2][0][1] = DEFAULT_SERVO_NEUTRAL_EPA;
@@ -57,7 +59,7 @@ void setupEpa() {
 
   hexapodEpa[2][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 20;  
   hexapodEpa[2][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 20;
-  hexapodEpa[2][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 20;
+  hexapodEpa[2][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 30;
 
   hexapodEpa[3][0][0] = DEFAULT_SERVO_NEUTRAL_EPA + 40;  
   hexapodEpa[3][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
@@ -65,7 +67,7 @@ void setupEpa() {
 
   hexapodEpa[3][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 30;  
   hexapodEpa[3][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
-  hexapodEpa[3][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
+  hexapodEpa[3][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 80;
   
   hexapodEpa[4][0][0] = DEFAULT_SERVO_NEUTRAL_EPA - 10;  
   hexapodEpa[4][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
@@ -73,15 +75,15 @@ void setupEpa() {
 
   hexapodEpa[4][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 50;  
   hexapodEpa[4][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 50;
-  hexapodEpa[4][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 50;
-//  
+  hexapodEpa[4][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 100;
+  
   hexapodEpa[5][0][0] = DEFAULT_SERVO_NEUTRAL_EPA - 0;  
   hexapodEpa[5][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 110;
   hexapodEpa[5][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 150;
 
   hexapodEpa[5][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 30;  
   hexapodEpa[5][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
-  hexapodEpa[5][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
+  hexapodEpa[5][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 80;
 }
 
 /**
@@ -277,6 +279,15 @@ void phaseA(int legNum) {
   moveServo(currentServoNum, DEFAULT_SERVO_NEUTRAL_EPA, DEFAULT_SERVO_MAX_EPA);
 }
 
+void phaseAPrime(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 1;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;    
+  //moveServo(currentServoNum, DEFAULT_SERVO_NEUTRAL_EPA, DEFAULT_SERVO_MAX_EPA);
+  //pwm.setPWM(currentServoNum, 0, hexapodEpa[i][j][1]);
+  moveServo(currentServoNum, hexapodEpa[legNum][1][1], hexapodEpa[legNum][1][2]);
+}
+
 void phaseB(int legNum) {
   int currentServoNum;
   int currentLegServoNum = 0;
@@ -361,10 +372,10 @@ void forward() {
 
 void loop() {
   //forward();
-  servosToNeutral();
-  delay(6000);
-  servosToMinimum();
-  delay(6000);
+//  servosToNeutral();
+//  delay(6000);
+//  servosToMinimum();
+//  delay(6000);
   servosToMaximum();
   delay(6000);
 }
