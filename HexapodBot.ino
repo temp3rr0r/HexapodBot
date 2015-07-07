@@ -14,6 +14,10 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define DEFAULT_SERVO_NEUTRAL_EPA 300
 #define DEFAULT_SERVO_MAX_EPA 350
 
+#define MIN_VALUE 0
+#define NEUTRAL_VALUE 1
+#define MAX_VALUE 2
+
 #define VERBOSE 0
 
 // 6 legs, 2 servos per leg, 3 EPA (Min, Neutral, Max) per servo
@@ -37,52 +41,52 @@ void setupEpa() {
   }
   
   // Custom - per individual servo settings
-  hexapodEpa[0][0][0] = DEFAULT_SERVO_MIN_EPA - 40;  
-  hexapodEpa[0][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
-  hexapodEpa[0][0][2] = DEFAULT_SERVO_NEUTRAL_EPA + 50;
+  hexapodEpa[0][0][MIN_VALUE] = DEFAULT_SERVO_MIN_EPA - 40;  
+  hexapodEpa[0][0][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
+  hexapodEpa[0][0][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA + 50;
 
-  hexapodEpa[0][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 40;  
-  hexapodEpa[0][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
+  hexapodEpa[0][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 90;  
+  hexapodEpa[0][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 90;
   hexapodEpa[0][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 10;
 
   hexapodEpa[1][0][0] = DEFAULT_SERVO_MIN_EPA - 20;  
   hexapodEpa[1][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 60;
-  hexapodEpa[1][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 10;
+  hexapodEpa[1][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 20;
 
-  hexapodEpa[1][1][0] = DEFAULT_SERVO_NEUTRAL_EPA;  
-  hexapodEpa[1][1][1] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodEpa[1][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 50;  
+  hexapodEpa[1][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 50;
   hexapodEpa[1][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 50;
   
   hexapodEpa[2][0][0] = DEFAULT_SERVO_MIN_EPA - 30;  
   hexapodEpa[2][0][1] = DEFAULT_SERVO_NEUTRAL_EPA;
   hexapodEpa[2][0][2] = DEFAULT_SERVO_NEUTRAL_EPA + 40;
 
-  hexapodEpa[2][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 20;  
-  hexapodEpa[2][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 20;
+  hexapodEpa[2][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 70;  
+  hexapodEpa[2][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 70;
   hexapodEpa[2][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 30;
 
   hexapodEpa[3][0][0] = DEFAULT_SERVO_NEUTRAL_EPA + 40;  
   hexapodEpa[3][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
   hexapodEpa[3][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 110;
 
-  hexapodEpa[3][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 30;  
-  hexapodEpa[3][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
+  hexapodEpa[3][1][0] = DEFAULT_SERVO_NEUTRAL_EPA + 20;  
+  hexapodEpa[3][1][1] = DEFAULT_SERVO_NEUTRAL_EPA + 20;
   hexapodEpa[3][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 80;
   
   hexapodEpa[4][0][0] = DEFAULT_SERVO_NEUTRAL_EPA - 10;  
   hexapodEpa[4][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
   hexapodEpa[4][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 70;
 
-  hexapodEpa[4][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 50;  
-  hexapodEpa[4][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 50;
+  hexapodEpa[4][1][0] = DEFAULT_SERVO_NEUTRAL_EPA;  
+  hexapodEpa[4][1][1] = DEFAULT_SERVO_NEUTRAL_EPA;
   hexapodEpa[4][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 100;
   
   hexapodEpa[5][0][0] = DEFAULT_SERVO_NEUTRAL_EPA - 0;  
   hexapodEpa[5][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 110;
   hexapodEpa[5][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 150;
 
-  hexapodEpa[5][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 30;  
-  hexapodEpa[5][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
+  hexapodEpa[5][1][0] = DEFAULT_SERVO_NEUTRAL_EPA + 20;  
+  hexapodEpa[5][1][1] = DEFAULT_SERVO_NEUTRAL_EPA + 20;
   hexapodEpa[5][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 80;
 }
 
@@ -283,9 +287,15 @@ void phaseAPrime(int legNum) {
   int currentServoNum;
   int currentLegServoNum = 1;
   currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;    
-  //moveServo(currentServoNum, DEFAULT_SERVO_NEUTRAL_EPA, DEFAULT_SERVO_MAX_EPA);
-  //pwm.setPWM(currentServoNum, 0, hexapodEpa[i][j][1]);
-  moveServo(currentServoNum, hexapodEpa[legNum][1][1], hexapodEpa[legNum][1][2]);
+  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][NEUTRAL_VALUE], hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
+}
+
+void phaseAPrimePlus(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 1;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;
+  //moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][NEUTRAL_VALUE], hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
+  pwm.setPWM(currentServoNum, 0, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
 }
 
 void phaseB(int legNum) {
@@ -295,6 +305,23 @@ void phaseB(int legNum) {
   moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
 }
 
+void phaseBPrime(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 0;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;
+  //moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
+  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE], hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
+}
+
+void phaseBPrimePlus(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 0;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;
+  //moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
+  //moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE], hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
+  pwm.setPWM(currentServoNum, 0, hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
+}
+
 void phaseC(int legNum) {
   int currentServoNum;
   int currentLegServoNum = 1;
@@ -302,11 +329,45 @@ void phaseC(int legNum) {
   moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
 }
 
+void phaseCPrime(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 1;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;  
+ // moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
+  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE], hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
+}
+
+void phaseCPrimePlus(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 1;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;  
+ // moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
+  //moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE], hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
+  pwm.setPWM(currentServoNum, 0, hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
+}
+
 void phaseD(int legNum) {
   int currentServoNum;
   int currentLegServoNum = 0;
   currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;   
   moveServo(currentServoNum, DEFAULT_SERVO_MIN_EPA, DEFAULT_SERVO_MAX_EPA);
+}
+
+void phaseDPrime(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 0;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;   
+  //moveServo(currentServoNum, DEFAULT_SERVO_MIN_EPA, DEFAULT_SERVO_MAX_EPA);
+  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MIN_VALUE], hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
+}
+
+void phaseDPrimePlus(int legNum) {
+  int currentServoNum;
+  int currentLegServoNum = 0;
+  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;   
+  //moveServo(currentServoNum, DEFAULT_SERVO_MIN_EPA, DEFAULT_SERVO_MAX_EPA);
+  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MIN_VALUE], hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
+  pwm.setPWM(currentServoNum, 0, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
 }
 
 /**
@@ -372,10 +433,59 @@ void forward() {
 
 void loop() {
   //forward();
-//  servosToNeutral();
+  servosToNeutral();
 //  delay(6000);
 //  servosToMinimum();
 //  delay(6000);
-  servosToMaximum();
+//  servosToMaximum();
   delay(6000);
+   
+  // A
+  // -> A1 - Front: Essentially, move A1 UP Neutral <-> Max
+   if (VERBOSE)    
+    Serial.println("-- Phase A.");
+  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
+    if (i == 0 || i == 2 || i == 4) 
+       phaseAPrimePlus(i);
+    else if (i == 1 || i == 3 || i == 5)
+       phaseCPrimePlus(i);
+  }
+  delay(2000);
+  
+    // B
+  // -> A0 - Front
+  if (VERBOSE)    
+    Serial.println("-- Phase B.");
+  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
+    if (i == 0 || i == 2 || i == 3 || i == 5) 
+       phaseBPrimePlus(i);
+    else if (i == 1 || i == 4)
+       phaseDPrimePlus(i);
+  }
+  delay(2000);
+
+    // C
+  // -> A1 - Neutral - Neutral <-> Max
+  if (VERBOSE)    
+    Serial.println("-- Phase C.");
+  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
+    if (i == 0 || i == 2 || i == 4) 
+       phaseCPrimePlus(i);
+    else if (i == 1 || i == 3 || i == 5)
+       phaseAPrimePlus(i);
+  }
+  delay(2000);
+  
+  // D   
+  // -> A0 - Neutral 
+  if (VERBOSE)    
+    Serial.println("-- Phase D.");
+  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
+    if (i == 0 || i == 2 || i == 3 || i == 5) 
+       phaseDPrimePlus(i);
+    else if (i == 1 || i == 4)
+       phaseBPrimePlus(i);
+  }
+  delay(2000);
+  
 }
