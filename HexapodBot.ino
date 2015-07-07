@@ -276,41 +276,12 @@ void moveMultipleLegs(int currentLegServoNum, int oddEvenLeg, int pulseLengthMin
   }
 }
 
-void phaseA(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 1;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;    
-  moveServo(currentServoNum, DEFAULT_SERVO_NEUTRAL_EPA, DEFAULT_SERVO_MAX_EPA);
-}
-
-void phaseAPrime(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 1;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;    
-  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][NEUTRAL_VALUE], hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
-}
-
 void phaseAPrimePlus(int legNum) {
   int currentServoNum;
   int currentLegServoNum = 1;
   currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;
   //moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][NEUTRAL_VALUE], hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
   pwm.setPWM(currentServoNum, 0, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
-}
-
-void phaseB(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 0;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;
-  moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
-}
-
-void phaseBPrime(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 0;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;
-  //moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
-  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE], hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
 }
 
 void phaseBPrimePlus(int legNum) {
@@ -322,21 +293,6 @@ void phaseBPrimePlus(int legNum) {
   pwm.setPWM(currentServoNum, 0, hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
 }
 
-void phaseC(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 1;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;  
-  moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
-}
-
-void phaseCPrime(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 1;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;  
- // moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
-  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE], hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
-}
-
 void phaseCPrimePlus(int legNum) {
   int currentServoNum;
   int currentLegServoNum = 1;
@@ -344,21 +300,6 @@ void phaseCPrimePlus(int legNum) {
  // moveServo(currentServoNum, DEFAULT_SERVO_MAX_EPA, DEFAULT_SERVO_MIN_EPA);
   //moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MAX_VALUE], hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
   pwm.setPWM(currentServoNum, 0, hexapodEpa[legNum][currentLegServoNum][MIN_VALUE]);
-}
-
-void phaseD(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 0;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;   
-  moveServo(currentServoNum, DEFAULT_SERVO_MIN_EPA, DEFAULT_SERVO_MAX_EPA);
-}
-
-void phaseDPrime(int legNum) {
-  int currentServoNum;
-  int currentLegServoNum = 0;
-  currentServoNum = legNum * NUM_SERVOS_PER_LEG + currentLegServoNum;   
-  //moveServo(currentServoNum, DEFAULT_SERVO_MIN_EPA, DEFAULT_SERVO_MAX_EPA);
-  moveServo(currentServoNum, hexapodEpa[legNum][currentLegServoNum][MIN_VALUE], hexapodEpa[legNum][currentLegServoNum][MAX_VALUE]);
 }
 
 void phaseDPrimePlus(int legNum) {
@@ -374,73 +315,10 @@ void phaseDPrimePlus(int legNum) {
 * Moves the hexapod forward. Does it in 4 sub-phases (A to D)
 */
 void forward() {
-  int currentServoNum, currentLegServoNum, oddEvenLeg;
-  int pulseLengthMin, pulseLengthMax;
-  
-  delay(5000);
-  
   if (VERBOSE)    
     Serial.println("-- Moving forward.");
    
-  // A
-  // -> A1 - Front: Essentially, move A1 UP Neutral <-> Max
-   if (VERBOSE)    
-    Serial.println("-- Phase A.");
-  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
-    if (i == 0 || i == 2 || i == 4) 
-       phaseA(i);
-    else if (i == 1 || i == 3 || i == 5)
-       phaseC(i);
-  }
-  delay(2000);
-  
-  // B
-  // -> A0 - Front
-  if (VERBOSE)    
-    Serial.println("-- Phase B.");
-  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
-    if (i == 0 || i == 2 || i == 3 || i == 5) 
-       phaseB(i);
-    else if (i == 1 || i == 4)
-       phaseD(i);
-  }
-  delay(2000);
-  
-  // C
-  // -> A1 - Neutral - Neutral <-> Max
-  if (VERBOSE)    
-    Serial.println("-- Phase C.");
-  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
-    if (i == 0 || i == 2 || i == 4) 
-       phaseC(i);
-    else if (i == 1 || i == 3 || i == 5)
-       phaseA(i);
-  }
-  delay(2000);
-  
-  // D   
-  // -> A0 - Neutral 
-  if (VERBOSE)    
-    Serial.println("-- Phase D.");
-  for (int i = 0; i < NUM_LEGS; i++) { // For each leg
-    if (i == 0 || i == 2 || i == 3 || i == 5) 
-       phaseD(i);
-    else if (i == 1 || i == 4)
-       phaseB(i);
-  }
-  delay(2000);
-}
-
-void loop() {
-  //forward();
-  servosToNeutral();
-//  delay(6000);
-//  servosToMinimum();
-//  delay(6000);
-//  servosToMaximum();
-  delay(6000);
-   
-  // A
+   // A
   // -> A1 - Front: Essentially, move A1 UP Neutral <-> Max
    if (VERBOSE)    
     Serial.println("-- Phase A.");
@@ -457,9 +335,9 @@ void loop() {
   if (VERBOSE)    
     Serial.println("-- Phase B.");
   for (int i = 0; i < NUM_LEGS; i++) { // For each leg
-    if (i == 0 || i == 2 || i == 3 || i == 5) 
+    if (i == 0 || i == 2 || i == 4) 
        phaseBPrimePlus(i);
-    else if (i == 1 || i == 4)
+    else if (i == 1 || i == 3 || i == 5)
        phaseDPrimePlus(i);
   }
   delay(2000);
@@ -481,11 +359,21 @@ void loop() {
   if (VERBOSE)    
     Serial.println("-- Phase D.");
   for (int i = 0; i < NUM_LEGS; i++) { // For each leg
-    if (i == 0 || i == 2 || i == 3 || i == 5) 
+    if (i == 0 || i == 2 || i == 4)  
        phaseDPrimePlus(i);
-    else if (i == 1 || i == 4)
+    else if (i == 1 || i == 3 || i == 5)
        phaseBPrimePlus(i);
   }
   delay(2000);
-  
+}
+
+void loop() {
+  servosToNeutral();
+//  delay(6000);
+//  servosToMinimum();
+//  delay(6000);
+//  servosToMaximum();
+  delay(6000);
+   
+  //forward();  
 }
