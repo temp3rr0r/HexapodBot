@@ -317,6 +317,61 @@ void phaseDPrimePlus(int legNum) {
 void forward() {
   if (VERBOSE)    
     Serial.println("-- Moving forward.");
+
+//  phaseAPrimePlus(4);
+  //delay(100);
+  phaseBPrimePlus(4);
+  delay(100);
+  phaseCPrimePlus(4);
+  delay(100);
+  phaseAPrimePlus(0);
+  delay(100);
+  phaseBPrimePlus(0);
+  delay(100);
+  phaseCPrimePlus(0);
+  delay(100);
+  phaseAPrimePlus(2);
+  delay(100);
+  phaseBPrimePlus(2);
+  delay(100);
+  phaseCPrimePlus(2);
+  delay(100);
+  phaseAPrimePlus(1);
+  phaseDPrimePlus(4);
+  phaseDPrimePlus(0);
+  phaseDPrimePlus(2);
+  delay(100);
+
+  
+  //phaseAPrimePlus(1);
+  //delay(100);
+  phaseBPrimePlus(1);
+  delay(100);
+  phaseCPrimePlus(1);
+  delay(100);
+  phaseAPrimePlus(3);
+  delay(100);
+  phaseBPrimePlus(3);
+  delay(100);
+  phaseCPrimePlus(3);
+  delay(100);
+  phaseAPrimePlus(5);
+  delay(100);
+  phaseBPrimePlus(5);
+  delay(100);
+  phaseCPrimePlus(5);
+  delay(100);
+  phaseAPrimePlus(4);
+  phaseDPrimePlus(1);
+  phaseDPrimePlus(3);
+  phaseDPrimePlus(5);
+  delay(100);
+ 
+}
+
+void forwardPrime() {
+  if (VERBOSE)    
+    Serial.println("-- Moving forward.");
    
    // A
   // -> A1 - Front: Essentially, move A1 UP Neutral <-> Max
@@ -368,12 +423,11 @@ void forward() {
 }
 
 void loop() {
-  servosToNeutral();
-//  delay(6000);
+  servosToNeutral(); delay(6000);
 //  servosToMinimum();
 //  delay(6000);
 //  servosToMaximum();
-  delay(6000);
+//  delay(6000);
    
-  //forward();  
+//  forward();  
 }
