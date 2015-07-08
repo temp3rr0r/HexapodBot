@@ -23,6 +23,9 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // 6 legs, 2 servos per leg, 3 EPA (Min, Neutral, Max) per servo
 uint16_t hexapodEpa[NUM_LEGS][NUM_SERVOS_PER_LEG][NUM_EPA_PER_SERVO];
 
+// the 3rd servo for each leg, for 4 only legs though
+uint16_t hexapodSteadyLegs[4][NUM_EPA_PER_SERVO];
+
 /**
 * Setup the End Point Adjustment for all the legs, all the servos
 */
@@ -88,6 +91,23 @@ void setupEpa() {
   hexapodEpa[5][1][0] = DEFAULT_SERVO_NEUTRAL_EPA + 20;  
   hexapodEpa[5][1][1] = DEFAULT_SERVO_NEUTRAL_EPA + 20;
   hexapodEpa[5][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 80;
+
+  // Custom, set neutral values for steady legs
+  hexapodSteadyLegs[0][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[0][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 100;
+  hexapodSteadyLegs[0][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  
+  hexapodSteadyLegs[1][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[1][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 110;
+  hexapodSteadyLegs[1][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  
+  hexapodSteadyLegs[2][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[2][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[2][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  
+  hexapodSteadyLegs[3][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[3][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 60;
+  hexapodSteadyLegs[3][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
 }
 
 /**
@@ -105,6 +125,12 @@ void servosToNeutral() {
       pwm.setPWM(currentServoNum, 0, hexapodEpa[i][j][1]);
     }
   }
+
+  // Also set the steady legs to neutral     
+  pwm.setPWM(12, 0, hexapodSteadyLegs[0][1]);
+  pwm.setPWM(13, 0, hexapodSteadyLegs[1][1]);
+  pwm.setPWM(14, 0, hexapodSteadyLegs[2][1]);
+  pwm.setPWM(15, 0, hexapodSteadyLegs[3][1]);
 }
 
 /**
