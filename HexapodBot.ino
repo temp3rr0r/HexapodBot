@@ -18,8 +18,8 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define NEUTRAL_VALUE 1
 #define MAX_VALUE 2
 
-#define FACTOR_1A -50
-#define FACTOR_1B 50
+#define FACTOR_1A -0
+#define FACTOR_1B 0
 
 #define VERBOSE 0
 
@@ -67,9 +67,9 @@ void setupEpa() {
   hexapodEpa[2][0][1] = DEFAULT_SERVO_NEUTRAL_EPA;
   hexapodEpa[2][0][2] = DEFAULT_SERVO_NEUTRAL_EPA + 40;
 
-  hexapodEpa[2][1][0] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 70;  
-  hexapodEpa[2][1][1] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 70;
-  hexapodEpa[2][1][2] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA + 30;
+  hexapodEpa[2][1][0] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 120;  
+  hexapodEpa[2][1][1] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 120;
+  hexapodEpa[2][1][2] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA + 80;
 
   hexapodEpa[3][0][0] = DEFAULT_SERVO_NEUTRAL_EPA + 40;  
   hexapodEpa[3][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
@@ -105,11 +105,11 @@ void setupEpa() {
   hexapodSteadyLegs[1][MAX_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
   
   hexapodSteadyLegs[2][MIN_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodSteadyLegs[2][NEUTRAL_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[2][NEUTRAL_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA + 10;
   hexapodSteadyLegs[2][MAX_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
   
   hexapodSteadyLegs[3][MIN_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodSteadyLegs[3][NEUTRAL_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 60;
+  hexapodSteadyLegs[3][NEUTRAL_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA + 10;
   hexapodSteadyLegs[3][MAX_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA;
 }
 
