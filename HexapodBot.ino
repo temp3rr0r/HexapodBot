@@ -18,6 +18,9 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define NEUTRAL_VALUE 1
 #define MAX_VALUE 2
 
+#define FACTOR_1A -50
+#define FACTOR_1B 50
+
 #define VERBOSE 0
 
 // 6 legs, 2 servos per leg, 3 EPA (Min, Neutral, Max) per servo
@@ -48,66 +51,66 @@ void setupEpa() {
   hexapodEpa[0][0][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
   hexapodEpa[0][0][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA + 50;
 
-  hexapodEpa[0][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 90;  
-  hexapodEpa[0][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 90;
-  hexapodEpa[0][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 10;
+  hexapodEpa[0][1][0] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 90;  
+  hexapodEpa[0][1][1] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 90;
+  hexapodEpa[0][1][2] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA + 10;
 
   hexapodEpa[1][0][0] = DEFAULT_SERVO_MIN_EPA - 20;  
   hexapodEpa[1][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 60;
   hexapodEpa[1][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 20;
 
-  hexapodEpa[1][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 50;  
-  hexapodEpa[1][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 50;
-  hexapodEpa[1][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 50;
+  hexapodEpa[1][1][0] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 50;  
+  hexapodEpa[1][1][1] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 50;
+  hexapodEpa[1][1][2] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA + 50;
   
   hexapodEpa[2][0][0] = DEFAULT_SERVO_MIN_EPA - 30;  
   hexapodEpa[2][0][1] = DEFAULT_SERVO_NEUTRAL_EPA;
   hexapodEpa[2][0][2] = DEFAULT_SERVO_NEUTRAL_EPA + 40;
 
-  hexapodEpa[2][1][0] = DEFAULT_SERVO_NEUTRAL_EPA - 70;  
-  hexapodEpa[2][1][1] = DEFAULT_SERVO_NEUTRAL_EPA - 70;
-  hexapodEpa[2][1][2] = DEFAULT_SERVO_NEUTRAL_EPA + 30;
+  hexapodEpa[2][1][0] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 70;  
+  hexapodEpa[2][1][1] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 70;
+  hexapodEpa[2][1][2] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA + 30;
 
   hexapodEpa[3][0][0] = DEFAULT_SERVO_NEUTRAL_EPA + 40;  
   hexapodEpa[3][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 30;
   hexapodEpa[3][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 110;
 
-  hexapodEpa[3][1][0] = DEFAULT_SERVO_NEUTRAL_EPA + 20;  
-  hexapodEpa[3][1][1] = DEFAULT_SERVO_NEUTRAL_EPA + 20;
-  hexapodEpa[3][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 80;
+  hexapodEpa[3][1][0] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA + 20;  
+  hexapodEpa[3][1][1] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA + 20;
+  hexapodEpa[3][1][2] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA - 80;
   
   hexapodEpa[4][0][0] = DEFAULT_SERVO_NEUTRAL_EPA - 10;  
   hexapodEpa[4][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 40;
   hexapodEpa[4][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 70;
 
-  hexapodEpa[4][1][0] = DEFAULT_SERVO_NEUTRAL_EPA;  
-  hexapodEpa[4][1][1] = DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodEpa[4][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 100;
+  hexapodEpa[4][1][0] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;  
+  hexapodEpa[4][1][1] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodEpa[4][1][2] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA - 100;
   
   hexapodEpa[5][0][0] = DEFAULT_SERVO_NEUTRAL_EPA - 0;  
   hexapodEpa[5][0][1] = DEFAULT_SERVO_NEUTRAL_EPA - 110;
   hexapodEpa[5][0][2] = DEFAULT_SERVO_NEUTRAL_EPA - 150;
 
-  hexapodEpa[5][1][0] = DEFAULT_SERVO_NEUTRAL_EPA + 20;  
-  hexapodEpa[5][1][1] = DEFAULT_SERVO_NEUTRAL_EPA + 20;
-  hexapodEpa[5][1][2] = DEFAULT_SERVO_NEUTRAL_EPA - 80;
+  hexapodEpa[5][1][0] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA + 20;  
+  hexapodEpa[5][1][1] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA + 20;
+  hexapodEpa[5][1][2] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA - 80;
 
   // Custom, set neutral values for steady legs
-  hexapodSteadyLegs[0][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodSteadyLegs[0][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 100;
-  hexapodSteadyLegs[0][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[0][MIN_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[0][NEUTRAL_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 100;
+  hexapodSteadyLegs[0][MAX_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA;
   
-  hexapodSteadyLegs[1][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodSteadyLegs[1][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 110;
-  hexapodSteadyLegs[1][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[1][MIN_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[1][NEUTRAL_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA - 110;
+  hexapodSteadyLegs[1][MAX_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
   
-  hexapodSteadyLegs[2][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodSteadyLegs[2][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodSteadyLegs[2][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[2][MIN_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[2][NEUTRAL_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[2][MAX_VALUE] = FACTOR_1B + DEFAULT_SERVO_NEUTRAL_EPA;
   
-  hexapodSteadyLegs[3][MIN_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
-  hexapodSteadyLegs[3][NEUTRAL_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA - 60;
-  hexapodSteadyLegs[3][MAX_VALUE] = DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[3][MIN_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA;
+  hexapodSteadyLegs[3][NEUTRAL_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA - 60;
+  hexapodSteadyLegs[3][MAX_VALUE] = FACTOR_1A + DEFAULT_SERVO_NEUTRAL_EPA;
 }
 
 /**
