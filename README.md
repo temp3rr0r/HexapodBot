@@ -1,4 +1,4 @@
-HexapodBot - Hexapod using 16 servos
+# HexapodBot - Hexapod using 16 servos
 
 https://www.youtube.com/watch?v=bbQ1RyfzJeo
 
