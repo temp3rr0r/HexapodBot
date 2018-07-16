@@ -2,7 +2,7 @@
 
 https://www.youtube.com/watch?v=bbQ1RyfzJeo
 
-Specs:
+## Specs:
 
 * Arduino Pro mini (Atmega 328P 5Volt 16MHz)
 * 18 servos x 9g Turnigy TG9e
